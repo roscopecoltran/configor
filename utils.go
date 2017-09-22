@@ -11,8 +11,18 @@ import (
 	"strings"
 
 	"github.com/BurntSushi/toml"
+	"github.com/gooops/env_strings"
 	yaml "gopkg.in/yaml.v2"
 )
+
+const (
+	ENV_CONFIGOR_KEY = "ENV_CONFIGOR_KEY"
+	ENV_CONFIGOR_EXT = ".env"
+)
+
+type EnvYaml struct {
+	*env_strings.EnvStrings
+}
 
 func (configor *Configor) getENVPrefix(config interface{}) string {
 	if configor.Config.ENVPrefix == "" {
