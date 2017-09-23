@@ -3,7 +3,7 @@ default: all
 all: build test
 
 build:
-	cd ./example && go build -o configore-test main.go
+	cd ./example && go build -o configor-test main.go
 
 test:
-	cd ./example && ./configore-test 
+	cd ./example && ./configor-test 
