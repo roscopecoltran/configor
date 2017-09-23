@@ -13,6 +13,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	// "github.com/fsamin/go-dump"
+	"github.com/go-ini/ini"
 	"github.com/joho/godotenv"
 
 	// "github.com/k0kubun/pp"
@@ -100,6 +101,13 @@ func processFile(config interface{}, file string) error {
 	}
 	data = []byte(dataStr)
 	switch {
+	case strings.HasSuffix(file, ".ini"):
+		var err error
+		config, err = ini.Load(data) // ref. https://github.com/go-ini/ini
+		if err != nil {
+			return err
+		}
+		return nil
 	case strings.HasSuffix(file, ".yaml") || strings.HasSuffix(file, ".yml"):
 		return yaml.Unmarshal(data, config)
 	case strings.HasSuffix(file, ".toml"):
@@ -165,32 +173,20 @@ func isEmptyStruct(object interface{}) bool {
 }
 
 func encodeFile(config interface{}, node string, format string) ([]byte, error) {
-	/*
-		ConfigCheck := reflect.Indirect(reflect.ValueOf(config))
-		if ConfigCheck.Kind() != reflect.Struct {
-			return nil, errors.New("invalid config, should be struct")
-		}
-
-		ConfigValue := reflect.ValueOf(config)
-		if ConfigValue.Kind() != reflect.Struct {
-			return nil, errors.New("invalid config, should be struct")
-		}
-
-		out := &bytes.Buffer{}
-		fmt.Println("Fdump config:")
-		dump.Fdump(out, config)
-		fmt.Println(out)
-
-		fmt.Println("Dump ToMap() config:")
-		m, _ := dump.ToMap(config, dump.WithDefaultLowerCaseFormatter())
-		fmt.Println(m)
-
-		s, _ := dump.Sdump(config)
-		fmt.Println("SDump config: \n", s)
-
-		ConfigNode := reflect.Indirect(ConfigValue).FieldByName(node)
-	*/
 	switch format {
+	case "ini":
+		var dataBytes bytes.Buffer
+		cfg := ini.Empty()
+		ini.ReflectFrom(cfg, config)
+		// cfg.MapTo(config)
+		//cfg.Section("").MapTo(config)
+		output, err := cfg.WriteTo(&dataBytes)
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+		fmt.Println(output)
+		return []byte(dataBytes.String()), nil
 	case "json":
 		data, err := json.MarshalIndent(config, "", "\t")
 		if err != nil {

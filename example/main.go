@@ -32,6 +32,6 @@ var Config = struct {
 func main() {
 	configor.Load(&Config, "config.yml")
 	// pp.Print(Config)
-	configor.Dump(Config, "all", "yaml,toml,json", "./dump")
+	configor.Dump(Config, "all", "yaml,toml,json,ini", "./dump")
 
 }

@@ -1,18 +1,16 @@
-hash: 42eb0144df46bfe5cacec54e10808cd2c90314d2e555e041211178b4630006d3
-updated: 2017-09-23T18:06:40.987486849+02:00
+hash: d58b6b6534f1dc1c7fcb4cb4c7c33e6a733ea96fbedc69905b2332f241558f2b
+updated: 2017-09-23T18:53:26.639088839+02:00
 imports:
 - name: github.com/BurntSushi/toml
   version: a368813c5e648fee92e5f6c30e3944ff9d5e8895
 - name: github.com/fsamin/go-dump
   version: 244c7d5469c6e61292cb207a5fcddc224b8d0ee7
+- name: github.com/go-ini/ini
+  version: c787282c39ac1fc618827141a1f762240def08a3
 - name: github.com/joho/godotenv
   version: a79fa1e548e2c689c241d10173efd51e5d689d5b
 - name: github.com/k0kubun/pp
   version: d1532fc5d94ecdf2da29e24d7b99721f3287de4a
-- name: github.com/mattn/go-colorable
-  version: d67e0b7d1797975196499f79bcc322c08b9f218b
-- name: github.com/mattn/go-isatty
-  version: ae0b1f8f8004be68d791a576e3d8e7648ab41449
 - name: gopkg.in/yaml.v2
   version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 testImports:
