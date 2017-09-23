@@ -1,0 +1,17 @@
+appname: test
+
+db:
+    name:     test
+    user:     test
+    password: test
+    port:     1234
+
+contacts:
+- name: i test
+  email: test@test.com
+
+oauth2:
+  github:
+    personal_token: {ENV.GITHUB_TOKEN}
+    client_id: {ENV.GITHUB_KEY}
+    client_secret: {ENV.GITHUB_SECRET}

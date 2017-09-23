@@ -11,18 +11,14 @@ import (
 	"strings"
 
 	"github.com/BurntSushi/toml"
-	"github.com/gooops/env_strings"
+	"github.com/joho/godotenv"
+
+	// "github.com/k0kubun/pp"
 	yaml "gopkg.in/yaml.v2"
 )
 
-const (
-	ENV_CONFIGOR_KEY = "ENV_CONFIGOR_KEY"
-	ENV_CONFIGOR_EXT = ".env"
-)
-
-type EnvYaml struct {
-	*env_strings.EnvStrings
-}
+var defaultEnvFiles []string = []string{".env"}
+var EnvKeys map[string]string
 
 func (configor *Configor) getENVPrefix(config interface{}) string {
 	if configor.Config.ENVPrefix == "" {
@@ -89,6 +85,22 @@ func processFile(config interface{}, file string) error {
 	if err != nil {
 		return err
 	}
+
+	if err := godotenv.Load(); err != nil {
+		return err
+	}
+
+	// replace KeyHolders before loading the YAML/JSON/TOML file
+	EnvKeys, _ = godotenv.Read(defaultEnvFiles...)
+
+	dataStr := string(data)
+
+	for k, v := range EnvKeys {
+		holderKey := fmt.Sprintf("{ENV.%s}", strings.Replace(k, "\"", "", -1))
+		dataStr = strings.Replace(dataStr, holderKey, v, -1)
+	}
+
+	data = []byte(dataStr)
 
 	switch {
 	case strings.HasSuffix(file, ".yaml") || strings.HasSuffix(file, ".yml"):

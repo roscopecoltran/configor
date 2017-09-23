@@ -1,7 +1,8 @@
 package: github.com/roscopecoltran/configor
 import:
 - package: github.com/BurntSushi/toml
-- package: github.com/gooops/env_strings
+- package: github.com/joho/godotenv
+- package: github.com/k0kubun/pp
 - package: gopkg.in/yaml.v2
 testImport:
 - package: github.com/jinzhu/configor
