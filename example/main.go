@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/k0kubun/pp"
+	// "github.com/k0kubun/pp"
 	"github.com/roscopecoltran/configor"
 )
 
@@ -31,5 +31,7 @@ var Config = struct {
 
 func main() {
 	configor.Load(&Config, "config.yml")
-	pp.Print(Config)
+	// pp.Print(Config)
+	configor.Dump(Config, "all", "yaml,toml,json", "./dump")
+
 }

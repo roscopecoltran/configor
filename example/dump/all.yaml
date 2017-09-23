@@ -1,0 +1,14 @@
+appname: test
+db:
+  name: test
+  user: test
+  password: cornholio
+  port: 1234
+contacts:
+- name: i test
+  email: test@test.com
+oauth2:
+  github:
+    personal_token: 42f6056c04c3c6c2f2d8d3a7aab23d575764ebd1
+    client_id: dde5181a8ba5f10cfbb8
+    client_secret: b22c205232ccc1ecb17d83d98d4315855dc7630a

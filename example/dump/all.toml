@@ -1,0 +1,17 @@
+APPName = "test"
+
+[DB]
+  Name = "test"
+  User = "test"
+  Password = "cornholio"
+  Port = 1234
+
+[[Contacts]]
+  Name = "i test"
+  Email = "test@test.com"
+
+[Oauth2]
+  [Oauth2.Github]
+    Token = "42f6056c04c3c6c2f2d8d3a7aab23d575764ebd1"
+    ClientKey = "dde5181a8ba5f10cfbb8"
+    ClientSecret = "b22c205232ccc1ecb17d83d98d4315855dc7630a"

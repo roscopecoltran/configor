@@ -1,6 +1,7 @@
 package configor
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -11,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/BurntSushi/toml"
+	// "github.com/fsamin/go-dump"
 	"github.com/joho/godotenv"
 
 	// "github.com/k0kubun/pp"
@@ -89,19 +91,14 @@ func processFile(config interface{}, file string) error {
 	if err := godotenv.Load(); err != nil {
 		return err
 	}
-
 	// replace KeyHolders before loading the YAML/JSON/TOML file
 	EnvKeys, _ = godotenv.Read(defaultEnvFiles...)
-
 	dataStr := string(data)
-
 	for k, v := range EnvKeys {
 		holderKey := fmt.Sprintf("{ENV.%s}", strings.Replace(k, "\"", "", -1))
 		dataStr = strings.Replace(dataStr, holderKey, v, -1)
 	}
-
 	data = []byte(dataStr)
-
 	switch {
 	case strings.HasSuffix(file, ".yaml") || strings.HasSuffix(file, ".yml"):
 		return yaml.Unmarshal(data, config)
@@ -125,11 +122,97 @@ func processFile(config interface{}, file string) error {
 // env, err := godotenv.Unmarshal("KEY=value")
 // err := godotenv.Write(env, "./.env")
 
+func getConfigDumpFilePath(prefixPath string, nodeName string, format string) string {
+	return fmt.Sprintf("%s/%s.%s", prefixPath, nodeName, format)
+}
+
+func getAttributesListToExport(attrs string) []string {
+	return strings.Split(attrs, ",")
+}
+
 func getPrefixForStruct(prefixes []string, fieldStruct *reflect.StructField) []string {
 	if fieldStruct.Anonymous && fieldStruct.Tag.Get("anonymous") == "true" {
 		return prefixes
 	}
 	return append(prefixes, fieldStruct.Name)
+}
+
+func writeFile(filePath string, data []byte) error {
+	if err := ioutil.WriteFile(filePath, data, 0600); err != nil {
+		return err
+	}
+	return nil
+}
+
+func isEmptyStruct(object interface{}) bool {
+	//First check normal definitions of empty
+	if object == nil {
+		return true
+	} else if object == "" {
+		return true
+	} else if object == false {
+		return true
+	}
+	//Then see if it's a struct
+	if reflect.ValueOf(object).Kind() == reflect.Struct {
+		// and create an empty copy of the struct object to compare against
+		empty := reflect.New(reflect.TypeOf(object)).Elem().Interface()
+		if reflect.DeepEqual(object, empty) {
+			return true
+		}
+	}
+	return false
+}
+
+func encodeFile(config interface{}, node string, format string) ([]byte, error) {
+	/*
+		ConfigCheck := reflect.Indirect(reflect.ValueOf(config))
+		if ConfigCheck.Kind() != reflect.Struct {
+			return nil, errors.New("invalid config, should be struct")
+		}
+
+		ConfigValue := reflect.ValueOf(config)
+		if ConfigValue.Kind() != reflect.Struct {
+			return nil, errors.New("invalid config, should be struct")
+		}
+
+		out := &bytes.Buffer{}
+		fmt.Println("Fdump config:")
+		dump.Fdump(out, config)
+		fmt.Println(out)
+
+		fmt.Println("Dump ToMap() config:")
+		m, _ := dump.ToMap(config, dump.WithDefaultLowerCaseFormatter())
+		fmt.Println(m)
+
+		s, _ := dump.Sdump(config)
+		fmt.Println("SDump config: \n", s)
+
+		ConfigNode := reflect.Indirect(ConfigValue).FieldByName(node)
+	*/
+	switch format {
+	case "json":
+		data, err := json.MarshalIndent(config, "", "\t")
+		if err != nil {
+			return nil, err
+		}
+		return data, nil
+	case "toml":
+		var dataBytes bytes.Buffer
+		if err := toml.NewEncoder(&dataBytes).Encode(config); err != nil {
+			return nil, err
+		}
+		// fmt.Println(dataBytes.String())
+		return []byte(dataBytes.String()), nil
+	case "yaml":
+		data, err := yaml.Marshal(config)
+		if err != nil {
+			return nil, err
+		}
+		return data, nil
+	}
+	return nil, errors.New("Unkown format to export")
+
 }
 
 func processTags(config interface{}, prefixes ...string) error {
