@@ -121,6 +121,10 @@ func processFile(config interface{}, file string) error {
 	}
 }
 
+// write env file (to do later !)
+// env, err := godotenv.Unmarshal("KEY=value")
+// err := godotenv.Write(env, "./.env")
+
 func getPrefixForStruct(prefixes []string, fieldStruct *reflect.StructField) []string {
 	if fieldStruct.Anonymous && fieldStruct.Tag.Get("anonymous") == "true" {
 		return prefixes
