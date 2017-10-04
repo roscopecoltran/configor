@@ -1,7 +1,6 @@
 package configor
 
 import (
-	//"fmt"
 	"os"
 	"regexp"
 )

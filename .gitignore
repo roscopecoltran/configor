@@ -3,3 +3,15 @@ vendor/
 vendor/**
 .env
 configor-test*
+
+export
+export/
+export/**
+
+configor-test*
+example/dump
+example/dump/
+example/dump/**
+all.json
+all.yaml
+all.ini

@@ -1,10 +1,13 @@
 package: github.com/roscopecoltran/configor
 import:
 - package: github.com/BurntSushi/toml
-- package: github.com/joho/godotenv
-- package: github.com/k0kubun/pp
-- package: gopkg.in/yaml.v2
-- package: github.com/fsamin/go-dump
 - package: github.com/go-ini/ini
+- package: github.com/asciimoo/ini
+- package: github.com/joho/godotenv
+- package: github.com/pierrec/go-ini
+- package: github.com/asciimoo/ini
+- package: github.com/tealeg/xlsx
+- package: gopkg.in/yaml.v2
+- package: github.com/roscopecoltran/pretty
 testImport:
-- package: github.com/jinzhu/configor
+# - package: github.com/jinzhu/configor

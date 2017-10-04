@@ -2,6 +2,7 @@ package main
 
 import (
 	// "github.com/k0kubun/pp"
+	"fmt"
 	"github.com/roscopecoltran/configor"
 )
 
@@ -30,8 +31,10 @@ var Config = struct {
 }{}
 
 func main() {
+	fmt.Println("loading config file")
 	configor.Load(&Config, "config.yml")
 	// pp.Print(Config)
+	fmt.Println("dumping config file")
 	configor.Dump(Config, "all", "yaml,toml,json,ini", "./dump")
 
 }

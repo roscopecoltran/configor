@@ -1,5 +1,7 @@
 appname: test
 
+author: roscopecoltran
+
 db:
     name:     test
     user:     test

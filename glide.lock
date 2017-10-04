@@ -1,16 +1,24 @@
-hash: d58b6b6534f1dc1c7fcb4cb4c7c33e6a733ea96fbedc69905b2332f241558f2b
-updated: 2017-09-23T18:53:26.639088839+02:00
+hash: a5ca31ca2da2ddfa3c31319dbfe3ca42b049a6cf2b242e47b826e5d48ab82d0a
+updated: 2017-09-24T11:46:44.638596916+02:00
 imports:
 - name: github.com/BurntSushi/toml
   version: a368813c5e648fee92e5f6c30e3944ff9d5e8895
-- name: github.com/fsamin/go-dump
-  version: 244c7d5469c6e61292cb207a5fcddc224b8d0ee7
 - name: github.com/go-ini/ini
   version: c787282c39ac1fc618827141a1f762240def08a3
 - name: github.com/joho/godotenv
   version: a79fa1e548e2c689c241d10173efd51e5d689d5b
-- name: github.com/k0kubun/pp
-  version: d1532fc5d94ecdf2da29e24d7b99721f3287de4a
+- name: github.com/kr/pretty
+  version: e6ac2fc51e89a3249e82157fa0bb7a18ef9dd5bb
+- name: github.com/kr/text
+  version: bb797dc4fb8320488f47bf11de07a733d7233e1f
+- name: github.com/pierrec/go-ini
+  version: e5919f8bb24619bdade0c1b49e1f540952aaed1e
+  subpackages:
+  - internal/structs
+- name: github.com/spf13/cast
+  version: acbeb36b902d72a7a4c18e8f3241075e7ab763e4
+- name: github.com/tealeg/xlsx
+  version: a06c872a6c402f194e9c817cf30f3840a75f8ffe
 - name: gopkg.in/yaml.v2
   version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 testImports:

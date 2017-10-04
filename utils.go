@@ -11,6 +11,10 @@ import (
 	"reflect"
 	"strings"
 
+	"crypto/hmac"
+	"crypto/md5"
+	"crypto/sha256"
+	"encoding/hex"
 	"github.com/BurntSushi/toml"
 	// "github.com/fsamin/go-dump"
 	"github.com/go-ini/ini"
@@ -83,6 +87,11 @@ func (configor *Configor) getConfigurationFiles(files ...string) []string {
 	return results
 }
 
+/*
+	Refs:
+	- https://github.com/ysqi/goall-rebot/blob/master/rebot/page.go#L23
+*/
+
 func processFile(config interface{}, file string) error {
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
@@ -103,6 +112,7 @@ func processFile(config interface{}, file string) error {
 	switch {
 	case strings.HasSuffix(file, ".ini"):
 		var err error
+		// config, err := ini.InsensitiveLoad(data)
 		config, err = ini.Load(data) // ref. https://github.com/go-ini/ini
 		if err != nil {
 			return err
@@ -172,21 +182,37 @@ func isEmptyStruct(object interface{}) bool {
 	return false
 }
 
+//func loadIni(cconfiginterface{}, f string) error {
+//	e := ini.MapTo(config, f)
+//	return e
+//}
+
 func encodeFile(config interface{}, node string, format string) ([]byte, error) {
 	switch format {
-	case "ini":
-		var dataBytes bytes.Buffer
-		cfg := ini.Empty()
-		ini.ReflectFrom(cfg, config)
-		// cfg.MapTo(config)
-		//cfg.Section("").MapTo(config)
-		output, err := cfg.WriteTo(&dataBytes)
-		if err != nil {
-			fmt.Println(err)
-			return nil, err
-		}
-		fmt.Println(output)
-		return []byte(dataBytes.String()), nil
+	/*
+		case "ini":
+			var dataBytes bytes.Buffer
+			// dataBytes := bytes.NewBuffer(nil)
+			// configValue := reflect.ValueOf(config)
+			outFile := ini.Empty()
+			configValue := reflect.Indirect(reflect.ValueOf(config))
+			configValue2 := reflect.ValueOf(config)
+			pp.Println(config)
+			pp.Println(configValue)
+			pp.Println(configValue2)
+			err := ini.ReflectFrom(outFile, config)
+			if err != nil {
+				fmt.Println(err)
+				return nil, err
+			}
+			output, err := outFile.WriteTo(&dataBytes)
+			if err != nil {
+				fmt.Println(err)
+				return nil, err
+			}
+			fmt.Println(output)
+			return []byte(dataBytes.String()), nil
+	*/
 	case "json":
 		data, err := json.MarshalIndent(config, "", "\t")
 		if err != nil {
@@ -225,7 +251,6 @@ func processTags(config interface{}, prefixes ...string) error {
 			field       = configValue.Field(i)
 			envName     = fieldStruct.Tag.Get("env") // read configuration from shell env
 		)
-
 		if !field.CanAddr() || !field.CanInterface() {
 			continue
 		}
@@ -257,6 +282,7 @@ func processTags(config interface{}, prefixes ...string) error {
 				// return error if it is required but blank
 				return errors.New(fieldStruct.Name + " is required, but blank")
 			}
+			// example ?!
 		}
 
 		for field.Kind() == reflect.Ptr {
@@ -280,4 +306,17 @@ func processTags(config interface{}, prefixes ...string) error {
 		}
 	}
 	return nil
+}
+
+func Md5(s string) string {
+	md5Ctx := md5.New()
+	md5Ctx.Write([]byte(s))
+	cipherStr := md5Ctx.Sum(nil)
+	return hex.EncodeToString(cipherStr)
+}
+
+func Hmac(k, s string) string {
+	h := hmac.New(sha256.New, []byte(k))
+	h.Write([]byte(s))
+	return string(hex.EncodeToString(h.Sum(nil)))
 }
