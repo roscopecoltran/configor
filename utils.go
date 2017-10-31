@@ -189,13 +189,13 @@ func isEmptyStruct(object interface{}) bool {
 
 func encodeFile(config interface{}, node string, format string) ([]byte, error) {
 	switch format {
-	/*
-		case "ini":
+	case "ini":
+		/*
 			var dataBytes bytes.Buffer
 			// dataBytes := bytes.NewBuffer(nil)
 			// configValue := reflect.ValueOf(config)
 			outFile := ini.Empty()
-			configValue := reflect.Indirect(reflect.ValueOf(config))
+			configValue := reflect.Indirect(reflect.ValueOf(*config))
 			configValue2 := reflect.ValueOf(config)
 			pp.Println(config)
 			pp.Println(configValue)
@@ -212,7 +212,7 @@ func encodeFile(config interface{}, node string, format string) ([]byte, error) 
 			}
 			fmt.Println(output)
 			return []byte(dataBytes.String()), nil
-	*/
+		*/
 	case "json":
 		data, err := json.MarshalIndent(config, "", "\t")
 		if err != nil {
